@@ -1,4 +1,5 @@
 using CampusConnect2.Data;
+using CampusConnect2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,4 +24,24 @@ public class StudentController : Controller
 
         return View(students);
     }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Student student)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(student);
+        }
+
+        _context.Students.Add(student);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+    
 }
